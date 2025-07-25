@@ -87,6 +87,44 @@ app.post("/viewall",(req,res)=>{
 
 
 
+// ****view my post api****
+
+app.post("/myposts",(req,res)=>{
+    let input=req.body
+    let token=req.headers.token
+    jwt.verify(token,"blog-app",(error,decoded)=>{
+
+        if (decoded) {
+            
+
+             postModel.find(input).then((items)=>{
+
+                res.json(items)
+
+
+             }).catch((error)=>{
+                res.json({"status":"user doesnt exist"})
+             })
+
+
+        } else {
+
+
+            res.json({"status":"invalid authentication"})
+
+
+
+        }
+
+
+    })
+   
+
+
+})
+
+
+
 
 
 

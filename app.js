@@ -4,12 +4,56 @@ const bcrypt = require("bcrypt")
 const cors = require("cors")
 const jwt = require("jsonwebtoken")
 const userModel = require("./models/users")
+const postModel = require("./models/posts")
 
 let app = express()
 
 app.use(express.json())
 app.use(cors())
 mongoose.connect("mongodb+srv://Anandu2001:Anandu2206@cluster0.xxwybre.mongodb.net/blogAppDb?retryWrites=true&w=majority&appName=Cluster0")
+
+
+
+// *****Creating post api*****
+
+app.post("/addpost",(req,res)=>{
+
+    let input=req.body
+
+
+    // token needs to be passed to perform actions after sign in   ----- also need to validate the token
+
+
+    let token=req.headers.token //token passed
+
+    // verify the token
+
+    jwt.verify(token,"blog-app",(error,decoded)=>{
+
+        if (decoded) {
+            
+            let result=new postModel(input)
+            result.save()
+            res.json({"status":"succesfull"})
+
+
+        } else {
+
+            res.json({"status":"invalid authentication"})
+            
+        }
+
+
+    })
+
+
+
+
+})
+
+
+
+
 
 
 
